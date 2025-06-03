@@ -35,13 +35,13 @@ jobs:
       - name: Copy state file
         run: |
           mkdir -p ./terraform
-          cp state-repo/terraform-aws.tfstate ./terraform/terraform-aws.tfstate || true
+          cp state-repo/terraform-aws.tfstate ./terraform/terraform.tfstate || true
 
       - name: Backup state file
         run: |
           mkdir -p ./terraform-backup
-          if [ -f ./terraform/terraform-aws.tfstate ]; then
-            cp ./terraform/terraform-aws.tfstate ./terraform-backup/terraform-aws.tfstate.bak
+          if [ -f ./terraform/terraform.tfstate ]; then
+            cp ./terraform/terraform.tfstate ./terraform-backup/terraform-aws.tfstate.bak
           fi
 
       - name: Terraform Init
@@ -60,7 +60,7 @@ jobs:
       - name: Copy updated state file back
         run: |
           ls -l ./terraform
-          cp ./terraform/terraform-aws.tfstate state-repo/terraform-aws.tfstate
+          cp ./terraform/terraform.tfstate state-repo/terraform-aws.tfstate
 
       - name: Commit and push state file
         run: |
