@@ -56,9 +56,10 @@ jobs:
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -auto-approve
         working-directory: ./terraform
-        
+
       - name: Copy updated state file back
         run: |
+          ls -l ./terraform
           cp ./terraform/terraform-aws.tfstate state-repo/terraform-aws.tfstate
 
       - name: Commit and push state file
