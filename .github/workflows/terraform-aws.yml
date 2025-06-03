@@ -52,13 +52,11 @@ jobs:
         run: terraform plan
         working-directory: ./terraform
 
-      # Uncomment to enable apply on push to main
-      # - name: Terraform Apply
-      #   if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-      #   run: terraform apply -auto-approve
-      #   working-directory: ./terraform
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: terraform apply -auto-approve
+        working-directory: ./terraform
 
-      
       - name: Commit and push state file
         run: |
           cd state-repo
