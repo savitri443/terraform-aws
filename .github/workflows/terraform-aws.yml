@@ -35,7 +35,14 @@ jobs:
       - name: Copy state file
         run: |
           mkdir -p ./terraform
-          cp state-repo/terraform.tfstate ./terraform/terraform.tfstate || true
+          cp state-repo/terraform-aws.tfstate ./terraform/terraform-aws.tfstate || true
+
+      - name: Backup state file
+        run: |
+          mkdir -p ./terraform-backup
+          if [ -f ./terraform/terraform-aws.tfstate ]; then
+            cp ./terraform/terraform-aws.tfstate ./terraform-backup/terraform-aws.tfstate.bak
+          fi
 
       - name: Terraform Init
         run: terraform init
@@ -51,16 +58,12 @@ jobs:
       #   run: terraform apply -auto-approve
       #   working-directory: ./terraform
 
-      - name: Copy state file
-        run: |
-          mkdir -p ./terraform
-          cp state-repo/terraform.tfstate ./terraform/terraform.tfstate || true
-
+      
       - name: Commit and push state file
         run: |
           cd state-repo
           git config --global user.email "actions@github.com"
           git config --global user.name "GitHub Actions"
-          git add terraform.tfstate
+          git add terraform-aws.tfstate
           git commit -m "Update terraform state [skip ci]" || echo "No changes to commit"
           git push
